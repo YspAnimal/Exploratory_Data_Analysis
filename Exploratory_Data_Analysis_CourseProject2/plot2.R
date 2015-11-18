@@ -12,14 +12,24 @@ if (!file.exists(destFile)){
 NEI <- readRDS("summarySCC_PM25.rds")
 SCC <- readRDS("Source_Classification_Code.rds")
 
-#User dplyr package to summarise Emissions data per year
-#I use log() function to make result more readable 
+#Use dplyr package to subsetting and summarise Emissions data per year by state
+#I use log() function to make more readable result
 library(dplyr)
-NEISubset <- ddply(NEI, "year", summarise, Emissions = log(sum(Emissions)))
+NEISubset <- filter(NEI, fips == "24510")
+NEISubset <- ddply(NEISubset, "year", summarise, Emissions = log(sum(Emissions)))
 
 #Open graphic device PNG and Draw figure
-png(filename = "plot1.png", width = 480, height = 480, units = "px")
-plot(NEISubset$year, NEISubset$Emissions, type = "l", main = "Total PM2.5 emissions", xlab = "Year", ylab = "Total emissions (Log)")
+png(filename = "plot2.png", width = 480, height = 480, units = "px")
+plot(NEISubset$year, NEISubset$Emissions, type = "l", main = "Total PM2.5 emissions in the Baltimore City", xlab = "Year", ylab = "Total emissions (Log)")
 points(NEISubset$year, NEISubset$Emissions, pch=15)
 axis(1, at = seq(1999, 2008, by = 1))
 dev.off()
+
+
+
+
+
+
+
+
+
