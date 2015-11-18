@@ -22,7 +22,7 @@ SCC <- SCC[grep("^fuel comb -(.*)- Coal$", SCC$EI.Sector, ignore.case=T), ]
 NEI <- NEI[NEI$SCC %in% SCC$SCC, ]
 #Summarise result by type and year
 NEISubset <- ddply(NEI, type~year, summarise, Emissions = log(sum(Emissions)))
-NEISubsetSum <- ddply(NEISubset, ~year, summarise, Emissions = sum(Emissions))
+NEISubsetSum <- ddply(NEI, "year", summarise, Emissions = log(sum(Emissions)))
 
 #Open graphic device PNG and Draw figure
 library(ggplot2)
@@ -31,3 +31,7 @@ qplot(year, Emissions, data = NEISubset, color = type, main = "Total PM2.5 emiss
   + lines(year, Emissions, data = NEISubsetSum)
   + geom_smooth()
 dev.off()
+
+
+
+
