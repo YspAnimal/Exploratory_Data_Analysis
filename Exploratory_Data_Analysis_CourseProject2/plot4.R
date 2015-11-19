@@ -12,30 +12,26 @@ if (!file.exists(destFile)){
 NEI <- readRDS("summarySCC_PM25.rds")
 SCC <- readRDS("Source_Classification_Code.rds")
 
-#User dplyr package to summarise Emissions data
+#Use dplyr package to summarise Emissions data
 #I use log() function to make more readable result
 library(dplyr)
-library(plyr)
 #First make subset of SCC data contains only coal combustion codes information
 SCC <- SCC[grep("^fuel comb -(.*)- Coal$", SCC$EI.Sector, ignore.case=T), ]
 #Second make subset of NEI data for coal combustion
 NEI <- NEI[NEI$SCC %in% SCC$SCC, ]
 #Summarise result by type and year
-NEISubset <- ddply(NEI, type~year, summarise, Emissions = log(sum(Emissions)))
-NEISubsetSum <- ddply(NEI, "year", summarise, Emissions = log(sum(Emissions)))
+NEISubsetType <- ddply(NEI, type~year, summarise, Emissions = log(sum(Emissions)))
+NEISubsetYear <- ddply(NEI, "year", summarise, Emissions = log(sum(Emissions)))
 
 #Open graphic device PNG and Draw figure
 library(ggplot2)
 png(filename = "plot4.png", width = 480, height = 480, units = "px")
 ggplot() + 
-  geom_line(aes(year, Emissions, color = type), NEISubset)+ 
-  geom_line(aes(year, Emissions, color = "Total(Year)"), NEISubsetSum)
-
-#qplot(year, Emissions, data = NEISubset, color = type, main = "Total PM2.5 emissions from coal combustion in the US by type") 
-#  + geom_line(~year, ~Emissions, data = NEISubsetSum)
-#  + geom_smooth()
+  #At first create plot by type 
+  geom_line(aes(year, Emissions, color = type), NEISubsetType)+ 
+  #At second add aggregate result by year
+  geom_line(aes(year, Emissions, color = "Total per Year)"), NEISubsetYear)+
+  labs(x = "Year")+
+  labs(y = expression("log Emissions"))+
+  labs(title = "Total PM2.5 emissions in US from coal combustion by type")
 dev.off()
-
-
-
-
