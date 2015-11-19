@@ -27,9 +27,13 @@ NEISubsetSum <- ddply(NEI, "year", summarise, Emissions = log(sum(Emissions)))
 #Open graphic device PNG and Draw figure
 library(ggplot2)
 png(filename = "plot4.png", width = 480, height = 480, units = "px")
-qplot(year, Emissions, data = NEISubset, color = type, main = "Total PM2.5 emissions from coal combustion in the US by type") 
-  + lines(year, Emissions, data = NEISubsetSum)
-  + geom_smooth()
+ggplot() + 
+  geom_line(aes(year, Emissions, color = type), NEISubset)+ 
+  geom_line(aes(year, Emissions, color = "Total(Year)"), NEISubsetSum)
+
+#qplot(year, Emissions, data = NEISubset, color = type, main = "Total PM2.5 emissions from coal combustion in the US by type") 
+#  + geom_line(~year, ~Emissions, data = NEISubsetSum)
+#  + geom_smooth()
 dev.off()
 
 
