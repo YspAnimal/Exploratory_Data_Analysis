@@ -24,8 +24,8 @@ SCC <- SCC[grep("vehicle", SCC$EI.Sector, ignore.case=T), ]
 NEIBaltimor <- NEIBaltimor[NEIBaltimor$SCC %in% SCC$SCC, ]
 NEILA <- NEILA[NEILA$SCC %in% SCC$SCC, ]
 #Summarise result by type and year
-NEIBaltimor <- ddply(NEIBaltimor, "year", summarise, Emissions = log(sum(Emissions)))
-NEILA <- ddply(NEILA, "year", summarise, Emissions = log(sum(Emissions)))
+NEIBaltimor <- ddply(NEIBaltimor, "year", summarise, Emissions = log10(sum(Emissions)))
+NEILA <- ddply(NEILA, "year", summarise, Emissions = log10(sum(Emissions)))
 
 #Open graphic device PNG and Draw figure
 library(ggplot2)
