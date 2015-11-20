@@ -37,5 +37,7 @@ ggplot() +
   geom_line(aes(year, Emissions, color = "Los Angeles"), NEILA)+
   labs(x = "Year")+
   labs(y = expression("log Emissions"))+
-  labs(title = "Total PM2.5 emissions from motor vehicle by City")
+  labs(title = expression("Total" ~ PM[2.5] ~ "Motor Vehicle emissions by City"))+
+  #Change legen name
+  guides(color=guide_legend(title="City"))
 dev.off()
